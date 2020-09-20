@@ -11,4 +11,6 @@
     <dimen name="add_button_width">48dp</dimen>
     <dimen name="add_button_height">48dp</dimen>
     <dimen name="card_view_default_radius">8dp</dimen>
+    <dimen name="iv_detail_width">256dp</dimen>
+    <dimen name="iv_detail_height">256dp</dimen>
 </resources>

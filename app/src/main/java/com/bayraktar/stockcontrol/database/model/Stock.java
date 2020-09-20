@@ -18,6 +18,10 @@ public class Stock {
 
     private float price;
 
+    private int quantity;
+
+    private boolean fav;
+
     public Stock(String name, String description, String imageUrl, float price) {
         this.name = name;
         this.description = description;
@@ -27,6 +31,14 @@ public class Stock {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setFav(boolean fav) {
+        this.fav = fav;
     }
 
     public int getId() {
@@ -47,5 +59,13 @@ public class Stock {
 
     public float getPrice() {
         return price;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public boolean isFav() {
+        return fav;
     }
 }

@@ -23,6 +23,10 @@ public class StockViewModel extends AndroidViewModel {
         allStocks = repository.getAllStocks();
     }
 
+    public LiveData<Stock> getById(int id) {
+        return repository.getById(id);
+    }
+
     public void insert(Stock stock) {
         repository.insert(stock);
     }

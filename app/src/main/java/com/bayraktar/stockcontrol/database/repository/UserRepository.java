@@ -4,6 +4,7 @@ import android.app.Application;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.bayraktar.stockcontrol.database.AppDatabase;
 import com.bayraktar.stockcontrol.database.model.User;
@@ -25,6 +26,14 @@ public class UserRepository {
         new InsertUserAsyncTask(userDao).execute(user);
     }
 
+    public User login(String userName, String password) {
+        return userDao.login(userName, password);
+    }
+
+    public User checkUser(String userName) {
+        return userDao.checkUser(userName);
+    }
+
     public void update(User user) {
         new UpdateUserAsyncTask(userDao).execute(user);
     }
@@ -37,10 +46,11 @@ public class UserRepository {
         return allUsers;
     }
 
-    private static class InsertUserAsyncTask extends AsyncTask<User,Void,Void>{
+    private static class InsertUserAsyncTask extends AsyncTask<User, Void, Void> {
 
         private UserDao userDao;
-        private InsertUserAsyncTask(UserDao userDao){
+
+        private InsertUserAsyncTask(UserDao userDao) {
             this.userDao = userDao;
         }
 
@@ -51,10 +61,11 @@ public class UserRepository {
         }
     }
 
-    private static class UpdateUserAsyncTask extends AsyncTask<User,Void,Void>{
+    private static class UpdateUserAsyncTask extends AsyncTask<User, Void, Void> {
 
         private UserDao userDao;
-        private UpdateUserAsyncTask(UserDao userDao){
+
+        private UpdateUserAsyncTask(UserDao userDao) {
             this.userDao = userDao;
         }
 
@@ -65,10 +76,11 @@ public class UserRepository {
         }
     }
 
-    private static class DeleteUserAsyncTask extends AsyncTask<User,Void,Void>{
+    private static class DeleteUserAsyncTask extends AsyncTask<User, Void, Void> {
 
         private UserDao userDao;
-        private DeleteUserAsyncTask(UserDao userDao){
+
+        private DeleteUserAsyncTask(UserDao userDao) {
             this.userDao = userDao;
         }
 

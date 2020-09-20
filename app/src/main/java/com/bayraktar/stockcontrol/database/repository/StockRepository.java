@@ -21,6 +21,14 @@ public class StockRepository {
         allStocks = stockDao.getAll();
     }
 
+    public LiveData<List<Stock>> getAllByIds(int[] ids) {
+        return stockDao.getAllByIds(ids);
+    }
+
+    public LiveData<Stock> getById(int id) {
+        return stockDao.findById(id);
+    }
+
     public void insert(Stock stock) {
         new InsertStockAsyncTask(stockDao).execute(stock);
     }

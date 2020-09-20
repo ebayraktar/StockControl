@@ -1,9 +1,6 @@
 <resources>
-    <string name="app_name">StockControl</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="app_name">Stock Control</string>
+    <string name="title_home">Ana Sayfa</string>
     <string name="todo">TODO</string>
     <string name="login">Giriş</string>
     <string name="user_name">Kullanıcı Adı</string>
@@ -11,4 +8,14 @@
     <string name="register">Kayıt ol</string>
     <string name="click_back_to_exit">Çıkmak için tekrar GERİ tuşuna basın</string>
     <string name="title_stocks">Ürünler</string>
+    <string name="basket">Sepet</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_basket">Sepet</string>
+    <string name="menu_fav">Fav</string>
+    <string name="title_profile">Profil</string>
+    <string name="text_continue">Devam</string>
+    <string name="delete_basket">Sepeti Temizle</string>
+    <string name="password_confirm">Parola Tekrar</string>
+    <string name="name">Ad Soyad</string>
 </resources>

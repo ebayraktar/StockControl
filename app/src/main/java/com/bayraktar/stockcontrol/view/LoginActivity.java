@@ -1,9 +1,10 @@
-package com.bayraktar.stockcontrol;
+package com.bayraktar.stockcontrol.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -11,14 +12,22 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.bayraktar.stockcontrol.App;
+import com.bayraktar.stockcontrol.R;
 import com.bayraktar.stockcontrol.database.AppDatabase;
+import com.bayraktar.stockcontrol.database.dao.UserDao;
+import com.bayraktar.stockcontrol.database.model.User;
 import com.google.android.material.textfield.TextInputLayout;
+
+import java.lang.ref.WeakReference;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener {
 
+    AppDatabase appDatabase;
+
     TextInputLayout tilUsername, tilPassword;
     EditText etUsername, etPassword;
-    AppDatabase appDatabase;
+    UserDao userDao;
 
     boolean doubleBackToExitPressedOnce = false;
 
@@ -46,6 +55,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        AppDatabase database = AppDatabase.getInstance(this);
+        userDao = database.userDao();
+
         tilUsername = findViewById(R.id.tilUsername);
         tilPassword = findViewById(R.id.tilPassword);
 
@@ -58,8 +70,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         findViewById(R.id.tvRegister).setOnClickListener(this);
         findViewById(R.id.cvLogin).setOnClickListener(this);
 
-        appDatabase = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "stock").build();
+        appDatabase = Room.databaseBuilder(getBaseContext(),
+                AppDatabase.class, "stock_control").build();
     }
 
     private void checkInput(View v, TextInputLayout til) {
@@ -75,10 +87,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     void login() {
         if (validateForm()) {
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-            finish();
+            String password = App.md5(etPassword.getText().toString());
+
+            new LoginAsyncTask(this, userDao).execute(etUsername.getText().toString(), password);
         }
+    }
+
+    public void success(User user) {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("user", user);
+        startActivity(intent);
+        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+        finish();
+    }
+
+    public void failed() {
+        Toast.makeText(LoginActivity.this, "Kullanıcı adı/parola hatalı", Toast.LENGTH_SHORT).show();
     }
 
     boolean validateForm() {
@@ -106,6 +130,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.tvRegister:
                 startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                finish();
                 break;
             case R.id.cvLogin:
                 login();
@@ -128,6 +153,33 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
             default:
                 break;
+        }
+    }
+
+    private static class LoginAsyncTask extends AsyncTask<String, Void, User> {
+
+        private WeakReference<LoginActivity> activity;
+        UserDao userDao;
+
+        public LoginAsyncTask(LoginActivity activity, UserDao userDao) {
+            this.activity = new WeakReference<>(activity);
+            this.userDao = userDao;
+        }
+
+
+        @Override
+        protected User doInBackground(String... strings) {
+            return userDao.login(strings[0], strings[1]);
+        }
+
+        @Override
+        protected void onPostExecute(User user) {
+            if (user != null) {
+                activity.get().success(user);
+            } else {
+                activity.get().failed();
+            }
+            super.onPostExecute(user);
         }
     }
 }
